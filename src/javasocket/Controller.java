@@ -19,19 +19,19 @@ public class Controller {
     @FXML
     protected void sendMessage() {
 
-        Label surya = new Label();
+        Label set_text = new Label();
 
-        surya.setText("Server Says: \n" + message.getText());
+        set_text.setText("Server Says: \n" + message.getText());
 
-        surya.setStyle("-fx-padding:10;-fx-margin:10;"
+        set_text.setStyle("-fx-padding:10;-fx-margin:10;"
                 + "-fx-background-color:teal;"
                 + "    -fx-background-insets: 5;"
                 + "-fx-font-size:15;"
                 + "-fx-background-radius: 3;");
-        surya.setPrefSize(Double.MAX_VALUE, Double.compare(0, 500));
-               surya.setWrapText(true);
-        surya.setTextAlignment(TextAlignment.JUSTIFY);
-        converstation.getChildren().add(surya);
+        set_text.setPrefSize(Double.MAX_VALUE, Double.compare(0, 500));
+               set_text.setWrapText(true);
+        set_text.setTextAlignment(TextAlignment.JUSTIFY);
+        converstation.getChildren().add(set_text);
 
         message.setText("");
 
@@ -43,6 +43,5 @@ public class Controller {
         if (ae.getCode().equals(KeyCode.ENTER)) {
             sendMessage();
         }
-
     }
 }
