@@ -15,7 +15,6 @@ public class JavaSocket extends Application {
         
         Parent root = FXMLLoader.load(getClass().getResource("server.fxml"));
         
-        
         Scene scene = new Scene(root);
         primaryStage.setTitle("Server");
         primaryStage.setScene(scene);
