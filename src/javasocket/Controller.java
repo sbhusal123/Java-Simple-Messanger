@@ -2,6 +2,7 @@ package javasocket;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -9,9 +10,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
 public class Controller {
+    
+    VBox msg_vbox = new VBox();
 
     @FXML
-    VBox converstation;
+    ScrollPane scrlpane;
 
     @FXML
     TextField message;
@@ -32,8 +35,8 @@ public class Controller {
         set_text.setPrefSize(Double.MAX_VALUE, Double.compare(0, 500));
                set_text.setWrapText(true);
         set_text.setTextAlignment(TextAlignment.JUSTIFY);
-        converstation.getChildren().add(set_text);
-
+        msg_vbox.getChildren().addAll(set_text);
+        scrlpane.setContent(msg_vbox);
         message.setText("");
 
     }
