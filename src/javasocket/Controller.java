@@ -22,6 +22,7 @@ public class Controller {
         Label set_text = new Label();
 
         set_text.setText("Server Says: \n" + message.getText());
+        
 
         set_text.setStyle("-fx-padding:10;-fx-margin:10;"
                 + "-fx-background-color:teal;"
