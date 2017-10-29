@@ -6,6 +6,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
@@ -27,15 +28,17 @@ public class Controller {
         set_text.setText("Server Says: \n" + message.getText());
         
 
-        set_text.setStyle("-fx-padding:10;-fx-margin:10;"
+        set_text.setStyle("-fx-padding:10;"
+                +"-fx-width:100%;"
                 + "-fx-background-color:teal;"
                 + "    -fx-background-insets: 5;"
                 + "-fx-font-size:15;"
                 + "-fx-background-radius: 3;");
-        set_text.setPrefSize(Double.MAX_VALUE, Double.compare(0, 500));
-               set_text.setWrapText(true);
+        set_text.setPrefSize(Region.USE_COMPUTED_SIZE, Double.SIZE);
+        set_text.setWrapText(true);
         set_text.setTextAlignment(TextAlignment.JUSTIFY);
         msg_vbox.getChildren().addAll(set_text);
+        scrlpane.fitToHeightProperty();
         scrlpane.setContent(msg_vbox);
         message.setText("");
 
