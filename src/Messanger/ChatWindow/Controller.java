@@ -1,4 +1,4 @@
-package javasocket;
+package Messanger.ChatWindow;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,6 +12,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import Messanger.Login.Login;
+import java.io.IOException;
 
 public class Controller implements  Initializable{
     
@@ -22,6 +24,14 @@ public class Controller implements  Initializable{
 
     @FXML
     TextField message;
+    
+    @FXML 
+    protected void Logout() throws IOException{
+        Login lgin = new Login();
+        lgin.loadView();
+        ChatWindow.cW.close();
+
+    }
 
     @FXML
     protected void sendMessage() {
@@ -45,6 +55,8 @@ public class Controller implements  Initializable{
         //VBox wrapper
         msg_vbox.getChildren().addAll(set_text);
         msg_vbox.setPrefWidth(600);
+        
+        
         //Further wrapped by ScrollPane
         scrlpane.fitToHeightProperty();
         scrlpane.setContent(msg_vbox);
