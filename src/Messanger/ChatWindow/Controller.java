@@ -14,8 +14,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import Messanger.Login.Login;
 import java.io.IOException;
+import Messanger.Settings.Settings;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Controller implements  Initializable{
+    
+    Settings set = new Settings();
     
     VBox msg_vbox = new VBox();
 
@@ -24,6 +29,16 @@ public class Controller implements  Initializable{
 
     @FXML
     TextField message;
+    
+        
+    @FXML 
+    protected void Settings(){
+        try {
+            set.loadView();
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     @FXML 
     protected void Logout() throws IOException{
