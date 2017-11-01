@@ -45,6 +45,15 @@ public class MainController implements Initializable {
 
     @FXML
     protected void settings_button(ActionEvent ev) {
+        
+        String Email_Reg;
+        Email_Reg = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/"
+                + "=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\"
+                + "x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)"
+                + "+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.)"
+                + "{3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:"
+                + "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|"
+                + "\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
         setting_scence.getChildren().clear();
         String button_Style = " -fx-background-color:\n"
                 + "        linear-gradient(#f0ff35, #a9ff00),\n"
@@ -133,8 +142,14 @@ public class MainController implements Initializable {
             setting_scence.add(submit, 2, 2);
             
             submit.setOnAction((ActionEvent ev1) -> {
-                System.out.println("\nEmail Address::"+email.getText());
-                md.updateEmail(email.getText(),Controller.SESSION_usrname );
+                if (email.getText().isEmpty()) {
+                    ShowError("Invalid Email","Field Empty !");
+                } else if (!email.getText().matches(Email_Reg)) {
+                    ShowError("Invalid Email","Please Type Valid email Address");
+                } else {
+                    md.updateEmail(email.getText(),Controller.SESSION_usrname );
+                    Settings.guiholder.close();
+                }
             });
 
         }
