@@ -17,9 +17,9 @@ public class Model {
 
         try {
 
-            Connection Conn = DriverManager.getConnection("jdbc:mysql://localhost/project", "root", "");
+            Connection Conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
 
-            String query = "select * from access";
+            String query = "select * from login";
 
             Statement st = Conn.createStatement();
 

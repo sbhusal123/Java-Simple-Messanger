@@ -67,7 +67,7 @@
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin></Button>
-            <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="122.0" stylesheets="@login.css" text="Register">
+            <Button mnemonicParsing="false" onAction="#registerUser" prefHeight="55.0" prefWidth="122.0" stylesheets="@login.css" text="Register">
                <HBox.margin>
                   <Insets left="110.0" />
                </HBox.margin>

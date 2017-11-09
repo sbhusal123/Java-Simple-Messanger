@@ -18,10 +18,10 @@ import Messanger.Settings.Settings;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Controller implements  Initializable{
-    
+public class Controller implements Initializable {
+
     Settings set = new Settings();
-    
+
     VBox msg_vbox = new VBox();
 
     @FXML
@@ -29,49 +29,44 @@ public class Controller implements  Initializable{
 
     @FXML
     TextField message;
-    
-        
-    @FXML 
-    protected void Settings(){
+
+    @FXML
+    protected void Settings() {
         try {
             set.loadView();
         } catch (IOException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    @FXML 
-    protected void Logout() throws IOException{
+
+    @FXML
+    protected void Logout() throws IOException {
         Login lgin = new Login();
         lgin.loadView();
         ChatWindow.cW.close();
-
     }
 
     @FXML
     protected void sendMessage() {
-
-        //new label text with message.
+         //new label text with message.
         Label set_text = new Label();
-        set_text.setText("Server Says: \n" + message.getText());
+        set_text.setText(Messanger.Login.Controller.SESSION_usrname + " Says: \n" + message.getText());
         set_text.setStyle("-fx-padding:10;"
-                +"-fx-width:100%;"
+                + "-fx-width:100%;"
                 + "-fx-background-color:teal;"
                 + "    -fx-background-insets: 5;"
                 + "-fx-font-size:15;"
                 + "-fx-background-radius: 3;");
-        
+
         set_text.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         set_text.setWrapText(true);
         set_text.setTextAlignment(TextAlignment.JUSTIFY);
         set_text.setPrefWidth(600);
-        
-        
+
         //VBox wrapper
         msg_vbox.getChildren().addAll(set_text);
         msg_vbox.setPrefWidth(600);
-        
-        
+
         //Further wrapped by ScrollPane
         scrlpane.fitToHeightProperty();
         scrlpane.setContent(msg_vbox);
@@ -82,7 +77,6 @@ public class Controller implements  Initializable{
 
     @FXML
     protected void check_key(KeyEvent ae) {
-
         if (ae.getCode().equals(KeyCode.ENTER)) {
             sendMessage();
         }
@@ -93,5 +87,5 @@ public class Controller implements  Initializable{
         scrlpane.setStyle("-fx-background:#32AED8");
         scrlpane.setPrefHeight(300);
     }
-    
+
 }

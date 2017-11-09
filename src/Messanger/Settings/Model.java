@@ -20,9 +20,9 @@ public class Model {
 
         try {
 
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/project", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
 
-            String query = "select * from access";
+            String query = "select * from login";
 
             Statement st = conn.createStatement();
 
@@ -53,9 +53,9 @@ public class Model {
     protected void updateEmail(String Email, String Username) {
         try {
 
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/project", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
 
-            String query = "update access set email=? where username=?";
+            String query = "update login set email=? where username=?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, Email);
             ps.setString(2, Username);
@@ -81,9 +81,9 @@ public class Model {
         ResultSet rs;
         try {
             //Start a connection
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/project", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
             //what to do with database
-            query = "select * from access where username=?";
+            query = "select * from login where username=?";
             //submit a query to the database
             statement = conn.prepareStatement(query);
             statement.setString(1, username);
@@ -95,7 +95,7 @@ public class Model {
                 }
             }
             if (passCheck) {
-                query = "update access set password=? where username=?";
+                query = "update login set password=? where username=?";
                 statement = conn.prepareStatement(query);
                 statement.setString(1, password);
                 statement.setString(2, username);

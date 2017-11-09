@@ -17,7 +17,7 @@ public class ChatWindow  {
         Stage primaryStage = new Stage();
         Scene scene = new Scene(root);
         primaryStage.getIcons().add(new Image("Resources/loginIcon.png"));
-        primaryStage.setTitle("ChatWindow -- "+Controller.SESSION_usrname);
+        primaryStage.setTitle("ChatWindow - "+Controller.SESSION_usrname);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();

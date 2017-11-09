@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import Messanger.RegisterUser.Register;
 
 public class Controller {
     
@@ -22,6 +23,14 @@ public class Controller {
     Label msg;
 
     Model md = new Model();
+    
+    @FXML
+    
+    protected void registerUser() throws Exception{
+        
+        Register reg  = new Register();
+        reg.onCreate();       
+    }
     
     @FXML
     protected void btnClick() throws IOException, ClassNotFoundException {
