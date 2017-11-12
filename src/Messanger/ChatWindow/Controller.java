@@ -15,8 +15,10 @@ import javafx.scene.text.TextAlignment;
 import Messanger.Login.Login;
 import java.io.IOException;
 import Messanger.Settings.Settings;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class Controller implements Initializable {
 
@@ -76,9 +78,15 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    protected void check_key(KeyEvent ae) {
+    protected void check_key(KeyEvent ae) throws SQLException {
         if (ae.getCode().equals(KeyCode.ENTER)) {
-            sendMessage();
+            Model md = new Model();
+            if(md.addMessage(Messanger.Login.Controller.SESSION_usrname, message.getText())){
+                sendMessage();
+            }else{
+                JOptionPane.showMessageDialog(null,"Message Sending failed \n "
+                    + "Please Check Your Internet Connection", "Error ", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }
 
