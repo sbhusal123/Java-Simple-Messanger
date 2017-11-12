@@ -3,16 +3,16 @@ package Messanger.ChatWindow;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 public class Model {
-    
-     private static Connection Conn = null;
-    
-    
-    
-     protected boolean addMessage(String username, String message) {
-         
-         
+
+    private static Connection Conn = null;
+
+    protected boolean addMessage(String username, String message) {
 
         try {
             Conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
@@ -26,13 +26,32 @@ public class Model {
 
             return true;
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
+        }
+        return false;
+    }
 
-           e.printStackTrace();
+    protected ResultSet getMessages() {
+
+        ResultSet rs = null;
+
+        try {
+
+            Conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
+
+            String query = "select * from messages";
+
+            Statement st = Conn.createStatement();
+
+            st.executeQuery(query);
+
+            rs = st.executeQuery(query);
+
+        } catch (SQLException e) {
 
         }
-         return false;
-     }
-    
-    
+
+        return rs;
+    }
+
 }

@@ -15,6 +15,7 @@ import javafx.scene.text.TextAlignment;
 import Messanger.Login.Login;
 import java.io.IOException;
 import Messanger.Settings.Settings;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +32,8 @@ public class Controller implements Initializable {
 
     @FXML
     TextField message;
+    
+    protected Model md = new Model();
 
     @FXML
     protected void Settings() {
@@ -46,6 +49,39 @@ public class Controller implements Initializable {
         Login lgin = new Login();
         lgin.loadView();
         ChatWindow.cW.close();
+    }
+    
+    
+    protected void refreshContent() throws SQLException{
+        
+        ResultSet messageArry =  md.getMessages();
+        
+        while(messageArry.next()){
+        //new label text with message.
+        Label set_text = new Label();
+        set_text.setText(messageArry.getString("username") + " Says: \n" + messageArry.getString("message"));
+        set_text.setStyle("-fx-padding:10;"
+                + "-fx-width:100%;"
+                + "-fx-background-color:teal;"
+                + "    -fx-background-insets: 5;"
+                + "-fx-font-size:15;"
+                + "-fx-background-radius: 3;");
+
+        set_text.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        set_text.setWrapText(true);
+        set_text.setTextAlignment(TextAlignment.JUSTIFY);
+        set_text.setPrefWidth(600);
+
+        //VBox wrapper
+        msg_vbox.getChildren().addAll(set_text);
+        msg_vbox.setPrefWidth(600);
+
+        //Further wrapped by ScrollPane
+        scrlpane.fitToHeightProperty();
+        scrlpane.setContent(msg_vbox);
+        scrlpane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrlpane.vvalueProperty().bind(msg_vbox.heightProperty()); //sets the scroll view to new element.
+        }
     }
 
     @FXML
@@ -80,7 +116,6 @@ public class Controller implements Initializable {
     @FXML
     protected void check_key(KeyEvent ae) throws SQLException {
         if (ae.getCode().equals(KeyCode.ENTER)) {
-            Model md = new Model();
             if(md.addMessage(Messanger.Login.Controller.SESSION_usrname, message.getText())){
                 sendMessage();
             }else{
@@ -94,6 +129,12 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         scrlpane.setStyle("-fx-background:#32AED8");
         scrlpane.setPrefHeight(300);
+        
+        try {
+            refreshContent();
+        } catch (SQLException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
