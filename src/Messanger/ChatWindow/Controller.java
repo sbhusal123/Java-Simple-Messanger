@@ -17,11 +17,70 @@ import java.io.IOException;
 import Messanger.Settings.Settings;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.scene.Node;
 import javax.swing.JOptionPane;
 
+class GUIupdater implements Runnable {
+
+    Controller ctrl;
+    Thread mainThread;
+    boolean mainThreadStatus = false;
+    
+    
+
+    GUIupdater(Controller ctrl) {
+        mainThreadStatus = true;
+        this.ctrl = ctrl;
+    }
+    
+
+    @Override
+    public void run() {
+        while (true || mainThreadStatus) {
+            try {
+                // do long-running operation
+                List<Node> newContent = ctrl.refreshedContent();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        // there should be no need to do this over and over again
+                        // you should move it outside of the task
+                        ctrl.msg_vbox.setPrefWidth(600);
+                        //scrlpane.fitToHeightProperty(); // does nothing anyway...
+                        ctrl.scrlpane.setContent(ctrl.msg_vbox);
+                        ctrl.scrlpane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                        ctrl.scrlpane.vvalueProperty().bind(ctrl.msg_vbox.heightProperty()); //probably won't work the intended way...
+
+                        // update ui
+                        ctrl.msg_vbox.getChildren().setAll(newContent);
+                        
+                    }
+
+                });
+                // do more long-running operations
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                System.out.println("asd");
+            } catch (SQLException ex) {
+                Logger.getLogger(GUIupdater.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+}
+
 public class Controller implements Initializable {
+    
+    Thread t1 = null;
 
     Settings set = new Settings();
 
@@ -32,8 +91,12 @@ public class Controller implements Initializable {
 
     @FXML
     TextField message;
-    
-    protected Model md = new Model();
+
+    protected Model md;
+
+    public Controller() throws SQLException {
+        this.md = new Model();
+    }
 
     @FXML
     protected void Settings() {
@@ -50,77 +113,49 @@ public class Controller implements Initializable {
         lgin.loadView();
         ChatWindow.cW.close();
     }
-    
-    
-    protected void refreshContent() throws SQLException{
-        
-        ResultSet messageArry =  md.getMessages();
-        
-        while(messageArry.next()){
-        //new label text with message.
-        Label set_text = new Label();
-        set_text.setText(messageArry.getString("username") + " Says: \n" + messageArry.getString("message"));
-        set_text.setStyle("-fx-padding:10;"
-                + "-fx-width:100%;"
-                + "-fx-background-color:teal;"
-                + "    -fx-background-insets: 5;"
-                + "-fx-font-size:15;"
-                + "-fx-background-radius: 3;");
 
-        set_text.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-        set_text.setWrapText(true);
-        set_text.setTextAlignment(TextAlignment.JUSTIFY);
-        set_text.setPrefWidth(600);
+    List<Node> refreshedContent() throws SQLException {
+        List<Node> result = new ArrayList<>();
 
-        //VBox wrapper
-        msg_vbox.getChildren().addAll(set_text);
-        msg_vbox.setPrefWidth(600);
+        ResultSet messageArray = md.getMessages();
 
-        //Further wrapped by ScrollPane
-        scrlpane.fitToHeightProperty();
-        scrlpane.setContent(msg_vbox);
-        scrlpane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrlpane.vvalueProperty().bind(msg_vbox.heightProperty()); //sets the scroll view to new element.
+        while (messageArray.next()) {
+            Label set_text = new Label();
+            set_text.setText(messageArray.getString("username") + " Says: \n" + messageArray.getString("message"));
+            set_text.setStyle("-fx-padding:10;"
+                    + "-fx-width:100%;"
+                    + "-fx-background-color:teal;"
+                    + "    -fx-background-insets: 5;"
+                    + "-fx-font-size:15;"
+                    + "-fx-background-radius: 3;");
+
+            set_text.setPrefSize(600, Region.USE_COMPUTED_SIZE);
+            set_text.setWrapText(true);
+            set_text.setTextAlignment(TextAlignment.JUSTIFY);
+
+            result.add(set_text);
         }
+
+        return result;
     }
+    
 
     @FXML
     protected void sendMessage() {
-         //new label text with message.
-        Label set_text = new Label();
-        set_text.setText(Messanger.Login.Controller.SESSION_usrname + " Says: \n" + message.getText());
-        set_text.setStyle("-fx-padding:10;"
-                + "-fx-width:100%;"
-                + "-fx-background-color:teal;"
-                + "    -fx-background-insets: 5;"
-                + "-fx-font-size:15;"
-                + "-fx-background-radius: 3;");
-
-        set_text.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-        set_text.setWrapText(true);
-        set_text.setTextAlignment(TextAlignment.JUSTIFY);
-        set_text.setPrefWidth(600);
-
-        //VBox wrapper
-        msg_vbox.getChildren().addAll(set_text);
-        msg_vbox.setPrefWidth(600);
-
-        //Further wrapped by ScrollPane
-        scrlpane.fitToHeightProperty();
-        scrlpane.setContent(msg_vbox);
-        scrlpane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrlpane.vvalueProperty().bind(msg_vbox.heightProperty()); //sets the scroll view to new element.
-        message.setText("");
+        //new label text with message.
+        if (md.addMessage(Messanger.Login.Controller.SESSION_usrname, message.getText())) {
+            message.setText("");
+        }
     }
 
     @FXML
     protected void check_key(KeyEvent ae) throws SQLException {
         if (ae.getCode().equals(KeyCode.ENTER)) {
-            if(md.addMessage(Messanger.Login.Controller.SESSION_usrname, message.getText())){
-                sendMessage();
-            }else{
-                JOptionPane.showMessageDialog(null,"Message Sending failed \n "
-                    + "Please Check Your Internet Connection", "Error ", JOptionPane.INFORMATION_MESSAGE);
+            if (md.addMessage(Messanger.Login.Controller.SESSION_usrname, message.getText())) {
+                message.setText("");
+            } else {
+                JOptionPane.showMessageDialog(null, "Message Sending failed \n "
+                        + "Please Check Your Internet Connection", "Error ", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
@@ -129,12 +164,8 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         scrlpane.setStyle("-fx-background:#32AED8");
         scrlpane.setPrefHeight(300);
-        
-        try {
-            refreshContent();
-        } catch (SQLException ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
+        t1 = new Thread(new GUIupdater(this));
+        t1.start();
+    }
 }

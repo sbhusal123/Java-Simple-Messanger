@@ -6,16 +6,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.JOptionPane;
 
 public class Model {
 
     private static Connection Conn = null;
 
+    Model() throws SQLException {
+        Conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
+    }
+
     protected boolean addMessage(String username, String message) {
 
         try {
-            Conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
+
             String query = "insert into messages(username , message ) values( ? , ? )";
 
             //Error 
@@ -36,8 +39,6 @@ public class Model {
         ResultSet rs = null;
 
         try {
-
-            Conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
 
             String query = "select * from messages";
 
