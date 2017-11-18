@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javax.swing.JOptionPane;
 
@@ -23,9 +24,9 @@ public class MainController implements Initializable {
     @FXML
     private TextField email;
     @FXML
-    private TextField password;
+    private PasswordField password;
     @FXML
-    private TextField repassword;
+    private PasswordField repassword;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

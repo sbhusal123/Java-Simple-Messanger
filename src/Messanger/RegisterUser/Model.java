@@ -6,24 +6,23 @@
 package Messanger.RegisterUser;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import Resources.DbParameters;
 
 public class Model {
 
-    private static Connection Conn = null;
+    private  Connection Conn = null;
     
+    Model(){
+        this.Conn = DbParameters.getConnectionInstance();
+    }
    
 
     protected boolean checkUserExistence(String username) {
         try {
-            
-             Conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
-
 
             String query = "select * from login";
 
@@ -79,4 +78,3 @@ public class Model {
     }
 
 }
-

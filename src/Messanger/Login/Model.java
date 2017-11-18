@@ -1,24 +1,26 @@
 package Messanger.Login;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.fxml.FXML;
 import javax.swing.JOptionPane;
+import Resources.DbParameters;
 
 public class Model {
+    
 
-    private static final Connection conn = null;
+    private  Connection Conn = null;
+    
+    Model(){
+        this.Conn = DbParameters.getConnectionInstance();
+    }
 
     @FXML
     protected boolean checkLogin(String username, String password) throws ClassNotFoundException, SQLException {
 
         try {
-
-            Connection Conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
-
             String query = "select * from login";
 
             Statement st = Conn.createStatement();

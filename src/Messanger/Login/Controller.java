@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Messanger.RegisterUser.Register;
+import javafx.scene.control.PasswordField;
 
 public class Controller {
     
@@ -17,7 +18,7 @@ public class Controller {
     @FXML
     TextField username;
     @FXML
-    TextField password;
+    PasswordField password;
     
     @FXML 
     Label msg;

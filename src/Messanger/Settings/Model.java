@@ -1,7 +1,6 @@
 package Messanger.Settings;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,10 +8,15 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import Resources.DbParameters;
 
 public class Model {
 
-    private Connection conn = null;
+    private final Connection conn;
+    
+    Model(){
+        conn = DbParameters.getConnectionInstance();
+    }
 
     protected infoObject getUserInfo(String username) {
 
@@ -20,7 +24,6 @@ public class Model {
 
         try {
 
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
 
             String query = "select * from login";
 
@@ -40,20 +43,12 @@ public class Model {
 
         } catch (SQLException ex) {
             System.out.println(ex);
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException ex) {
-                System.out.println(ex);
-            }
         }
         return null;
     }
 
     protected void updateEmail(String Email, String Username) {
         try {
-
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
 
             String query = "update login set email=? where username=?";
             PreparedStatement ps = conn.prepareStatement(query);
@@ -64,13 +59,7 @@ public class Model {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Database Connection Error \n "
                     + "Please Check Your Internet Connection", "Error ", JOptionPane.INFORMATION_MESSAGE);
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException ex) {
-
-            }
-        }
+        } 
 
     }
 
@@ -80,9 +69,6 @@ public class Model {
         PreparedStatement statement;
         ResultSet rs;
         try {
-            //Start a connection
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
-            //what to do with database
             query = "select * from login where username=?";
             //submit a query to the database
             statement = conn.prepareStatement(query);
@@ -111,7 +97,6 @@ public class Model {
     }
 
     protected class infoObject {
-
         String email;
         String accountStatus;
     }
