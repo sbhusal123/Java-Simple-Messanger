@@ -16,7 +16,7 @@ public class DbParameters {
     
     public static Connection getConnectionInstance(){
         try {
-            connect = DriverManager.getConnection("jdbc:mysql://localhost/jmessanger", "root", "");
+            connect = DriverManager.getConnection(DbHost,username,password);
         } catch (SQLException ex) {
             Logger.getLogger(DbParameters.class.getName()).log(Level.SEVERE, null, ex);
         }
